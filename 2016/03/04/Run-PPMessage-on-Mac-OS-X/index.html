@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en-US"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Run PPMessage on Mac OS X | Blog of PPMessage</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/pure-min.css"><link rel="stylesheet" type="text/css" href="/css/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Run PPMessage on Mac OS X</h1><a id="logo" href="/.">Blog of PPMessage</a><p class="description">Open Source Plug &amp; Play Customer Communication System</p></div><div id="nav-menu"><a href="/." class="current"><i class="icon-home"> 首页</i></a><a href="/archives/"><i class="icon-archive"> 归档</i></a><a href="/about/"><i class="icon-about"> 关于</i></a><a href="/atom.xml"><i class="icon-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post post-page"><h1 class="post-title">Run PPMessage on Mac OS X</h1><div class="post-meta">2016-03-04 | </div><span data-disqus-identifier="2016/03/04/Run-PPMessage-on-Mac-OS-X/" class="disqus-comment-count"></span><div class="post-content"><blockquote>
+<p>PPMessage is <code>An Open Source Plug &amp; Play Online Customer Service Platform</code>. Base on PPMessage, you can chat with your customer via Web and mobile real time. </p>
+</blockquote>
+<h1 id="Run-PPMessage-on-Mac-OS-X"><a href="#Run-PPMessage-on-Mac-OS-X" class="headerlink" title="Run PPMessage on Mac OS X"></a>Run PPMessage on Mac OS X</h1><blockquote>
+<p>Want to know more (install PPMessage on other OS platform, configuration etc.), please go to <a href="http://ppmessage.com" target="_blank" rel="external">PPMessage Site</a> get more documents about PPMessage.</p>
+</blockquote>
+<h2 id="Requirements"><a href="#Requirements" class="headerlink" title="Requirements"></a>Requirements</h2><ul>
+<li>Homebrew<ul>
+<li>Download and install from <a href="http://brew.sh" target="_blank" rel="external">http://brew.sh</a><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>Install command</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">brew install hg autoconf libtool automake redis libmagic mysql libjpeg libffi fdk-aac lame mercurial</span><br><span class="line">brew tap homebrew/services</span><br><span class="line">brew tap homebrew/nginx</span><br><span class="line">brew install nginx-full --with-upload-module</span><br><span class="line">brew install ffmpeg --with-fdk-aac --with-opencore-amr --with-libvorbis --with-opus</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Or use <code>ppmessage/scripts/install_brews.py</code> to install automatically</p>
+</li>
+</ul>
+<ul>
+<li><p>Manual download</p>
+<ul>
+<li><p>Apns-client source</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hg <span class="built_in">clone</span> https://dingguijin@bitbucket.org/dingguijin/apns-client</span><br><span class="line"><span class="built_in">cd</span> ./apns-client; sudo -H python setup.py install; <span class="built_in">cd</span> -</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Geolite2 library source</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/maxmind/libmaxminddb</span><br><span class="line"><span class="built_in">cd</span> libmaxmindb; ./bootstrap; ./configure; make; make install; <span class="built_in">cd</span> -</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Geolite2 DB (assuming you have cloned the ppmessage source, and under the root <code>ppmessage</code> directory.)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ppmessage/api/geolite2</span><br><span class="line">wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz</span><br><span class="line">gunzip GeoLite2-City.mmdb.gz</span><br><span class="line"><span class="built_in">cd</span> -</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>sh ppmessage/scripts/download_geolite2.sh is an alternative scripts way which PPMessage provides.</p>
+</blockquote>
+<ul>
+<li>Mysql connector python<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-2.1.3.tar.gz</span><br><span class="line">tar zxvf mysql-connector-python-2.1.3.tar.gz</span><br><span class="line"><span class="built_in">cd</span> mysql-connector-python-2.1.3</span><br><span class="line">sudo python setup.py install</span><br><span class="line"><span class="built_in">cd</span> -</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Python pip</p>
+<ul>
+<li><p>Install command</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -H pip install AxmlParserPY beautifulsoup4 biplist certifi cffi chardet cryptography evernote filemagic geoip2 green identicon ipaddr jieba matplotlib maxminddb numpy paho-mqtt paramiko Pillow ppmessage-mqtt pyOpenSSL pyparsing pypinyin python-dateutil python-gcm qiniu qrcode readline redis requests rq scikit-learn scipy six SQLAlchemy supervisor tornado xlrd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Or use <code>ppmessage/scrips/install_pips.py</code> to install automatically</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Config-mysql-and-redis"><a href="#Config-mysql-and-redis" class="headerlink" title="Config mysql and redis"></a>Config mysql and redis</h2><ul>
+<li>Mysql user and password (replace DB_PASSWORD with what you want to set as db password)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew services list</span><br><span class="line">brew services start mysql</span><br><span class="line">mysqladmin -uroot password DB_PASSWORD</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Redis</p>
+<ul>
+<li><p>Start redis</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew services list</span><br><span class="line">brew services start redis</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Config redis </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/<span class="built_in">local</span>/etc/redis.conf and comment all save lines</span><br><span class="line">&gt; <span class="comment"># save 900 1</span></span><br><span class="line">&gt; <span class="comment"># save 300 10</span></span><br><span class="line">&gt; <span class="comment"># save 60 10000</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Config-and-prepare-PPMessage"><a href="#Config-and-prepare-PPMessage" class="headerlink" title="Config and prepare PPMessage"></a>Config and prepare PPMessage</h2><blockquote>
+<p>Assuming you have clone ppmessage and under ppmessage directory.<br>In the directory, you can see <code>dist.sh</code> <code>README.md</code> files and <code>ppmessage</code> directory.</p>
+</blockquote>
+<p>Before config PPMessage check the requirement is done or not.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python ppmessage/scripts/require.py</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ppmessage/bootstrap/config.py</span><br><span class="line">...</span><br><span class="line">python ppmessage/scripts/table.py</span><br><span class="line">python ppmessage/scripts/bootstrap.py</span><br><span class="line">python ppmessage/scripts/db2cache.py</span><br></pre></td></tr></table></figure>
+<h3 id="Generate-PPCom-web-version"><a href="#Generate-PPCom-web-version" class="headerlink" title="Generate PPCom - web version"></a>Generate PPCom - web version</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ppmessage/ppcom/web</span><br><span class="line">bower install</span><br><span class="line"><span class="built_in">cd</span> -</span><br><span class="line"><span class="built_in">cd</span> ppmessage/ppcom/web/gulp</span><br><span class="line">npm install</span><br><span class="line">gulp</span><br></pre></td></tr></table></figure>
+<h3 id="Generate-PPKefu-web-version"><a href="#Generate-PPKefu-web-version" class="headerlink" title="Generate PPKefu - web version"></a>Generate PPKefu - web version</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ppmessage/ppkefu/ppkefu</span><br><span class="line">bower install</span><br><span class="line">npm install</span><br><span class="line">gulp</span><br></pre></td></tr></table></figure>
+<h3 id="Generate-PPConsole"><a href="#Generate-PPConsole" class="headerlink" title="Generate PPConsole"></a>Generate PPConsole</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ppmessage/ppconsole</span><br><span class="line">bower install</span><br><span class="line"><span class="built_in">cd</span> -</span><br><span class="line"><span class="built_in">cd</span> ppmessage/ppconsole/gulp</span><br><span class="line">npm install</span><br><span class="line">gulp</span><br></pre></td></tr></table></figure>
+<h3 id="Start-Stop-PPMessage-server"><a href="#Start-Stop-PPMessage-server" class="headerlink" title="Start/Stop PPMessage server"></a>Start/Stop PPMessage server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sh dist.sh start</span><br><span class="line">sh dist.sh stop</span><br></pre></td></tr></table></figure>
+<h3 id="See-log"><a href="#See-log" class="headerlink" title="See log"></a>See log</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh dist.sh <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Check PPMessage status<br>sh dist.sh proc</p>
+</blockquote>
+<h3 id="Check-PPCOM"><a href="#Check-PPCOM" class="headerlink" title="Check PPCOM"></a>Check PPCOM</h3><p>Use your brower open your server url which has been configed, suggest using Chrome browser.</p>
+<blockquote>
+<p>PPCONSOLE/PPCOM<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://server_name:nginx_listen_port</span><br></pre></td></tr></table></figure></p>
+<p>PPKEFU<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://server_name:nginx_listen_port/ppkefu</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</div><div class="tags"></div><div class="post-nav"><a href="/2016/03/04/Run-VPN-client-on-Aliyun/" class="pre"><i class="icon-previous">Run VPN client on Aliyun</i></a></div><div id="disqus_thread"><script>var disqus_shortname = 'ppmessageblog';
+var disqus_identifier = '2016/03/04/Run-PPMessage-on-Mac-OS-X/';
+var disqus_title = 'Run PPMessage on Mac OS X';
+var disqus_url = 'http://yoursite.com/2016/03/04/Run-PPMessage-on-Mac-OS-X/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//ppmessageblog.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search" class="search-form-input"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title">分类</div></div><div class="widget"><div class="widget-title">标签</div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title">最新文章</div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/05/03/Install-PPMessage-on-Ubuntu-Server/">Install PPMessage on Ubuntu Server</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/03/Install-PPMessage-on-Debian-8-04-Jessie/">Install PPMessage on Debian 8.04 (Jessie)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/09/PPMessage-An-Open-Source-Realtime-Online-Customer-Communication-Platform-3/">PPMessage - An Open Source Realtime Online Customer Communication Platform - (3)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/PPMessage-An-Open-Source-Realtime-Online-Customer-Communication-Platform-2/">PPMessage - An Open Source Realtime Online Customer Communication Platform - (2)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/PPMessage-An-Open-Source-Realtime-Online-Customer-Communication-Platform-1/">PPMessage - An Open Source Realtime Online Customer Communication Platform - (1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/Deploy-PPMessage-on-Linux/">Deploy PPMessage on Linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/Deploy-PPMessage-on-Mac/">Deploy PPMessage on Mac</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/04/Deploy-PPMessage-with-Docker/">Deploy PPMessage with Docker</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/04/Run-VPN-client-on-Aliyun/">Run VPN client on Aliyun</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/04/Run-PPMessage-on-Mac-OS-X/">Run PPMessage on Mac OS X</a></li></ul></div><div class="widget"><div class="widget-title">最近评论</div><script type="text/javascript" src="//ppmessageblog.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title">友情链接</div><ul></ul><a href="http://www.ppmessage.com/" title="PPMessage Home" target="_blank">PPMessage Home</a></div></div></div></div><div id="footer">© <a href="/." rel="nofollow">Blog of PPMessage.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div><a id="rocket" href="#top" class="show"></a><script src="/js/jquery.min.js"></script>
+<script src="/js/totop.js"></script><script src="/js/fancybox.pack.js"></script>
+<script src="/js/jquery.fancybox.js"></script><link rel="stylesheet" href="/css/jquery.fancybox.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-72560081-1','auto');ga('send','pageview');
+</script></div></body></html>

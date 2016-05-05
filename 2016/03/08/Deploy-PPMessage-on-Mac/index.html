@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en-US"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Deploy PPMessage on Mac | Blog of PPMessage</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/pure-min.css"><link rel="stylesheet" type="text/css" href="/css/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Deploy PPMessage on Mac</h1><a id="logo" href="/.">Blog of PPMessage</a><p class="description">Open Source Plug &amp; Play Customer Communication System</p></div><div id="nav-menu"><a href="/." class="current"><i class="icon-home"> 首页</i></a><a href="/archives/"><i class="icon-archive"> 归档</i></a><a href="/about/"><i class="icon-about"> 关于</i></a><a href="/atom.xml"><i class="icon-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post post-page"><h1 class="post-title">Deploy PPMessage on Mac</h1><div class="post-meta">2016-03-08 | </div><span data-disqus-identifier="2016/03/08/Deploy-PPMessage-on-Mac/" class="disqus-comment-count"></span><div class="post-content"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>部署 PPMessage 对 Mac OS X 系统版本并无要求，建议使用最新版本。</p>
+<p>以下说明在 OS X EI Captain 10.11.2 测试通过。</p>
+</blockquote>
+<hr>
+<h3 id="具体部署流程"><a href="#具体部署流程" class="headerlink" title="具体部署流程"></a>具体部署流程</h3><ol>
+<li><p>安装 brew</p>
+<pre><code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
+</code></pre></li>
+<li><p>brew 安装依赖</p>
+<pre><code>brew install hg autoconf libtool automake redis libmagic mysql libjpeg libffi fdk-aac lame mercurial
+brew tap homebrew/services
+brew tap homebrew/nginx
+brew install nginx-full --with-upload-module
+brew install ffmpeg --with-fdk-aac --with-opencore-amr --with-libvorbis --with-opus
+</code></pre></li>
+<li><p>pip 安装 Python 模块</p>
+<p> 安装命令：</p>
+<pre><code>sudo pip install -i http://pypi.douban.com/simple axmlparserpy beautifulsoup4 biplist evernote filemagic geoip2 green git+https://github.com/senko/python-video-converter.git hg+https://dingguijin@bitbucket.org/dingguijin/apns-client identicon ipython jieba paramiko paho-mqtt pillow ppmessage-mqtt pyipa pypinyin pyparsing python-dateutil python-gcm python-magic qiniu qrcode readline redis rq supervisor sqlalchemy tornado xlrd numpy matplotlib scipy scikit-learn
+</code></pre><p> <em>说明1：类似 <code>git+https://github.com/senko/python-video-converter.git</code> 模块的安装方法与普通 pip 安装方法无异。例如：</em></p>
+<pre><code>sudo pip install git+https://github.com/senko/python-video-converter.git
+</code></pre><p> <em>说明2：可以通过国内 pip 源进行安装，下载速度更快。例如使用豆瓣源安装 axmlparsepy。</em></p>
+<pre><code>sudo pip install -i http://pypi.douban.com/simple axmlparsepy
+</code></pre><p> <em>说明3：在 Mac OS X Captain 下安装 green 可能出现以下错误：</em></p>
+<pre><code>OSError: [Errno 1] Operation not permitted: &apos;/var/folders/nj/ky4gzkdn0db_wdxxyph3j93h0000gn/T/pip-xoS3tF-uninstall/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/six-1.4.1-py2.7.egg-info&apos;
+</code></pre><p> <em>可用以下命令安装 green</em></p>
+<pre><code>sudo pip install green --ignore-installed six
+</code></pre><p> <em>安装其他模块也可能出现类似错误，在这种情况下，只需要使用 ‘–ignore-installed xxx’ 即可</em></p>
+</li>
+<li><p>下载、编译、安装其他依赖</p>
+<p> 其他依赖包括 mysql-connector-python, libmaxminddb</p>
+<ol>
+<li><p>安装 mysql-connector-python</p>
+<pre><code>wget http://cdn.mysql.com//Downloads/Connector-Python/mysql-connector-python-2.1.3.tar.gz
+tar -xzvf mysql-connector-python-2.1.3.tar.gz
+cd mysql-connector-python-2.1.3
+sudo python setup.py install
+</code></pre></li>
+<li><p>安装 libmaxminddb</p>
+<pre><code>git clone --recursive https://github.com/maxmind/libmaxminddb
+cd libmaxminddb
+./bootstrap
+./configure
+make &amp;&amp; sudo make install
+</code></pre></li>
+</ol>
+</li>
+</ol>
+<hr>
+<h3 id="快速部署脚本"><a href="#快速部署脚本" class="headerlink" title="快速部署脚本"></a>快速部署脚本</h3><p><a href="https://github.com/PPMESSAGE/ppmessage/blob/master/ppmessage/deploy/deploy-ppmesage-on-mac.sh" target="_blank" rel="external">deploy-ppmessage-on-mac.sh</a></p>
+<hr>
+<h3 id="Have-fun-with-PPMessage"><a href="#Have-fun-with-PPMessage" class="headerlink" title="Have fun with PPMessage !"></a>Have fun with PPMessage !</h3></div><div class="tags"></div><div class="post-nav"><a href="/2016/03/08/Deploy-PPMessage-on-Linux/" class="pre"><i class="icon-previous">Deploy PPMessage on Linux</i></a><a href="/2016/03/04/Deploy-PPMessage-with-Docker/" class="next">Deploy PPMessage with Docker<i class="icon-next"></i></a></div><div id="disqus_thread"><script>var disqus_shortname = 'ppmessageblog';
+var disqus_identifier = '2016/03/08/Deploy-PPMessage-on-Mac/';
+var disqus_title = 'Deploy PPMessage on Mac';
+var disqus_url = 'http://yoursite.com/2016/03/08/Deploy-PPMessage-on-Mac/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//ppmessageblog.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search" class="search-form-input"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title">分类</div></div><div class="widget"><div class="widget-title">标签</div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title">最新文章</div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/05/03/Install-PPMessage-on-Ubuntu-Server/">Install PPMessage on Ubuntu Server</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/03/Install-PPMessage-on-Debian-8-04-Jessie/">Install PPMessage on Debian 8.04 (Jessie)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/09/PPMessage-An-Open-Source-Realtime-Online-Customer-Communication-Platform-3/">PPMessage - An Open Source Realtime Online Customer Communication Platform - (3)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/PPMessage-An-Open-Source-Realtime-Online-Customer-Communication-Platform-2/">PPMessage - An Open Source Realtime Online Customer Communication Platform - (2)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/PPMessage-An-Open-Source-Realtime-Online-Customer-Communication-Platform-1/">PPMessage - An Open Source Realtime Online Customer Communication Platform - (1)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/Deploy-PPMessage-on-Linux/">Deploy PPMessage on Linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/08/Deploy-PPMessage-on-Mac/">Deploy PPMessage on Mac</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/04/Deploy-PPMessage-with-Docker/">Deploy PPMessage with Docker</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/04/Run-VPN-client-on-Aliyun/">Run VPN client on Aliyun</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/04/Run-PPMessage-on-Mac-OS-X/">Run PPMessage on Mac OS X</a></li></ul></div><div class="widget"><div class="widget-title">最近评论</div><script type="text/javascript" src="//ppmessageblog.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title">友情链接</div><ul></ul><a href="http://www.ppmessage.com/" title="PPMessage Home" target="_blank">PPMessage Home</a></div></div></div></div><div id="footer">© <a href="/." rel="nofollow">Blog of PPMessage.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div><a id="rocket" href="#top" class="show"></a><script src="/js/jquery.min.js"></script>
+<script src="/js/totop.js"></script><script src="/js/fancybox.pack.js"></script>
+<script src="/js/jquery.fancybox.js"></script><link rel="stylesheet" href="/css/jquery.fancybox.css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-72560081-1','auto');ga('send','pageview');
+</script></div></body></html>
